@@ -1,8 +1,22 @@
-;#Include %A_ScriptDir%\maw-muter.ahk
+#Include %A_ScriptDir%\maw-muter.ahk
 #Persistent
 #SingleInstance Force
 #UseHook
 SetTitleMatchMode, 2
+
+full_command_line := DllCall("GetCommandLine", "str")
+
+if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
+{
+    try
+    {
+        if A_IsCompiled
+            Run *RunAs "%A_ScriptFullPath%" /restart
+        else
+            Run *RunAs "%A_AhkPath%" /restart "%A_ScriptFullPath%"
+    }
+    ExitApp
+}
 
 ; Get the directory of the AutoHotkey script
 ScriptDir := A_ScriptDir
@@ -75,7 +89,7 @@ if (MutingMethodSelected = "2") {
     }
 } else if (MutingMethodSelected = "1") {
     ahkmethod := "disabled"
-    ;ahkmethod := "enabled"
+    ahkmethod := "enabled"
     if (ahkmethod = "enabled") {
         if (FileExist(ScriptDir . "\maw-muter.ahk")) {
             mutingmethod := "maw-muter_ahk"
@@ -165,11 +179,11 @@ RunMute:
                 if(PIDMute = "1") {
                     if (EnableDebug)
                         MsgBox, MAWAHKPID %pid%
-                    ;MAWAHKPID(pid)
+                    MAWAHKPID(pid)
                 } else {
                     if (EnableDebug)
                         MsgBox, MAWAHK %pid%
-                    ;MAWAHK(exename)
+                    MAWAHK(exename)
                 }
             }
         }
@@ -409,3 +423,4 @@ return
     if ErrorLevel
         MsgBox, Failed to run MAW as administrator.
     return
+

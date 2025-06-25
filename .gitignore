@@ -1,6 +1,2 @@
-**/svcl.exe
-**/maw-muter.exe
 **/*.rar
 CompressIntoRar.bat
-**/maw-muter.ahk
-MuteActiveWindow/Config/Settings.ini
